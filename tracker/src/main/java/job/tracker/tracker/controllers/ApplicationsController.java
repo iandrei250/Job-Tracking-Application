@@ -20,7 +20,7 @@ import job.tracker.tracker.service.JobService;
 public class ApplicationsController {
     private final JobService jobService = new JobService();
 
-       @GetMapping
+    @GetMapping
     public List<JobApplication> getAllJobs() {
         return jobService.getAll();
     }
