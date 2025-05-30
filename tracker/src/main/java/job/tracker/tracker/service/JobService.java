@@ -1,46 +1,43 @@
 package job.tracker.tracker.service;
 import org.springframework.stereotype.Service;
 
-import job.tracker.tracker.entities.JobApplication;
-
-import java.time.LocalDate;
+import job.tracker.tracker.db.ApplicationTrackerRepository;
+import job.tracker.tracker.entities.JobApplicationEntity;
 import java.util.*;
 
 @Service
 public class JobService {
 
-    private final Map<UUID, JobApplication> jobApplications = new HashMap<>();
+   private final ApplicationTrackerRepository repository;
 
-    public JobService() {
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        jobApplications.put(id1, new JobApplication(id1, "Google", "Frontend Developer", "APPLIED", LocalDate.now(), "Submitted via careers page"));
-        jobApplications.put(id2, new JobApplication(id2, "Amazon", "Fullstack Engineer", "INTERVIEWING", LocalDate.now().minusDays(5), "HR round done"));
+    public JobService(ApplicationTrackerRepository repository) {
+        this.repository = repository;
     }
 
-    public List<JobApplication> getAll() {
-        return new ArrayList<>(jobApplications.values());
+    public List<JobApplicationEntity> getAll() {
+        return repository.findAll();
     }
 
-    public Optional<JobApplication> getById(UUID id) {
-        return Optional.ofNullable(jobApplications.get(id));
+    public Optional<JobApplicationEntity> getById(UUID id) {
+        return repository.findById(id);
     }
 
-    public JobApplication create(JobApplication request) {
-        UUID id = UUID.randomUUID();
-        JobApplication job = new JobApplication(
-            id,
-            request.companyName(),
-            request.position(),
-            request.status(),
-            request.appliedDate(),
-            request.notes()
-        );
-        jobApplications.put(id, job);
-        return job;
+    public JobApplicationEntity create(JobApplicationEntity application) {
+        return repository.save(application);
     }
 
-    public boolean delete(UUID id) {
-        return jobApplications.remove(id) != null;
+    public Optional<JobApplicationEntity> update(UUID id, JobApplicationEntity updated) {
+        return repository.findById(id).map(existing -> {
+            existing.setCompanyName(updated.getCompanyName());
+            existing.setPosition(updated.getPosition());
+            existing.setStatus(updated.getStatus());
+            existing.setAppliedDate(updated.getAppliedDate());
+            existing.setNotes(updated.getNotes());
+            return repository.save(existing);
+        });
+    }
+
+    public void delete(UUID id) {
+        repository.deleteById(id);
     }
 }
