@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import job.tracker.tracker.entities.JobApplicationEntity;
 import job.tracker.tracker.service.JobService;
+import job.tracker.tracker.dtos.JobApplicationDTO;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -26,7 +27,7 @@ public class ApplicationsController {
     }
 
     @GetMapping
-    public List<JobApplicationEntity> getAllJobs() {
+    public List<JobApplicationDTO> getAllJobs() {
         return jobService.getAll();
     }
 

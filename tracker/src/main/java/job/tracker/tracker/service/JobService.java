@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import job.tracker.tracker.db.ApplicationTrackerRepository;
 import job.tracker.tracker.db.UserRepository;
+import job.tracker.tracker.dtos.JobApplicationDTO;
 import job.tracker.tracker.entities.JobApplicationEntity;
 import job.tracker.tracker.entities.UserEntity;
 
@@ -21,8 +22,17 @@ public class JobService {
         this.repository = repository;
     }
 
-    public List<JobApplicationEntity> getAll() {
-        return repository.findAll();
+    public List<JobApplicationDTO> getAll() {
+        return repository.findAll().stream()
+        .map(app -> new JobApplicationDTO(
+            app.getId(),
+            app.getCompanyName(),
+            app.getPosition(),
+            app.getStatus(),
+            app.getAppliedDate(),
+            app.getUser() != null ? app.getUser().getId() : null
+        ))
+        .toList();
     }
 
     public Optional<JobApplicationEntity> getById(UUID id) {
@@ -56,7 +66,7 @@ public class JobService {
         JobApplicationEntity application = repository.findById(jobId)
             .orElseThrow(() -> new RuntimeException("Application not found"));
 
-        application.setUser(user.getId().toString());
+        application.setUser(user);
         repository.save(application);
     }
 }
