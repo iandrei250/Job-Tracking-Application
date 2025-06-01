@@ -3,6 +3,7 @@ package job.tracker.tracker.service;
 import org.springframework.stereotype.Service;
 
 import job.tracker.tracker.db.UserRepository;
+import job.tracker.tracker.entities.JobApplicationEntity;
 import job.tracker.tracker.entities.UserEntity;
 
 import java.util.*;

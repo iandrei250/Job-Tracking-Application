@@ -54,4 +54,10 @@ public class ApplicationsController {
         jobService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/{jobId}/apply/{userId}")
+    public ResponseEntity<Void> applyToJob(@PathVariable UUID jobId, @PathVariable UUID userId) {
+        jobService.applyToJob(jobId, userId);
+        return ResponseEntity.ok().build();
+    }
 }

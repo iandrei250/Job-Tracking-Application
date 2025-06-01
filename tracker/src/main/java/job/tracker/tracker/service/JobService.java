@@ -1,16 +1,23 @@
 package job.tracker.tracker.service;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import job.tracker.tracker.db.ApplicationTrackerRepository;
+import job.tracker.tracker.db.UserRepository;
 import job.tracker.tracker.entities.JobApplicationEntity;
-import java.util.*;
+import job.tracker.tracker.entities.UserEntity;
 
 @Service
 public class JobService {
 
    private final ApplicationTrackerRepository repository;
+   private final UserRepository userRepository;
 
-    public JobService(ApplicationTrackerRepository repository) {
+    public JobService(ApplicationTrackerRepository repository, UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.repository = repository;
     }
 
@@ -39,5 +46,17 @@ public class JobService {
 
     public void delete(UUID id) {
         repository.deleteById(id);
+    }
+
+    public void applyToJob(UUID jobId, UUID userId) {
+
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        JobApplicationEntity application = repository.findById(jobId)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        application.setUser(user.getId().toString());
+        repository.save(application);
     }
 }

@@ -10,8 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import job.tracker.tracker.entities.UserEntity;
-import jakarta.persistence.CascadeType;
 
 
 @Entity
@@ -36,13 +34,13 @@ public class JobApplicationEntity {
     @Column(length = 1000)
     private String notes;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "user_id")
+    private String userId;
 
     public JobApplicationEntity() {}
 
-    public JobApplicationEntity(String companyName, String position, String status, LocalDate appliedDate, String notes) {
+    public JobApplicationEntity(String companyName, String position, String status, LocalDate appliedDate, String notes ) {
         this.companyName = companyName;
         this.position = position;
         this.status = status;
@@ -94,11 +92,11 @@ public class JobApplicationEntity {
         this.notes = notes;
     }
 
-    public UserEntity getUser() {
-        return user;
+    public String getUser() {
+        return userId;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
+    public void setUser(String userId) {
+        this.userId = userId;
     }
 }
