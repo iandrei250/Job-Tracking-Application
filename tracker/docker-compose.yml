@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: mariadb-jobs
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+      MARIADB_DATABASE: job_applications
+      MARIADB_USER: root
+      MARIADB_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/job_applications
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  mariadb_data:
