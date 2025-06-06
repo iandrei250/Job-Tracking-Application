@@ -1,10 +1,10 @@
-import { Outlet, RouterProvider } from "react-router-dom";
-import { router } from "./utils/routes/routes";
+import { Outlet } from "react-router-dom";
+import { Navbar } from "./components/shared/Navbar";
 
 function App() {
   return (
-    <div>
-      <RouterProvider router={router} />
+    <div className="size-svh">
+      <Navbar />
       <Outlet />
     </div>
   );
