@@ -3,7 +3,7 @@ import { Navbar } from "./components/shared/Navbar";
 
 function App() {
   return (
-    <div className="size-svh">
+    <div className="w-screen h-screen">
       <Navbar />
       <Outlet />
     </div>
