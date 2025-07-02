@@ -10,8 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import job.tracker.tracker.entities.UserEntity;
-import jakarta.persistence.CascadeType;
 
 
 @Entity
